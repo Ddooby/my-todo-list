@@ -1,7 +1,7 @@
 import { TodoFormProps } from "@/interface/App";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useState } from "react";
-import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
+import { NativeSyntheticEvent, StyleSheet, TextInput, TextInputSubmitEditingEventData, TouchableOpacity, View } from "react-native";
 
 const Header: React.FC<TodoFormProps> = ({ addTodo }) => {
   
@@ -9,10 +9,15 @@ const Header: React.FC<TodoFormProps> = ({ addTodo }) => {
   const [newTodo, setNewTodo] = useState('');
 
   const addNewTodo = () => {
+    console.log('addNewTodo Init');
     if (newTodo) {
       addTodo(newTodo);
       setNewTodo('');
     }
+  }
+
+  const handleEnterAdd = (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
+    addNewTodo();
   }
 
   return (
@@ -25,6 +30,7 @@ const Header: React.FC<TodoFormProps> = ({ addTodo }) => {
                   autoCorrect={ false }
                   value={newTodo}
                   onChangeText={(newTodo) => setNewTodo(newTodo)}
+                  onSubmitEditing={handleEnterAdd}
               />
               <TouchableOpacity onPressOut={addNewTodo}>
                   <MaterialCommunityIcons style={styles.addBtn} size={30} name='plus-circle' />

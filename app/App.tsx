@@ -11,6 +11,7 @@ const App = () => {
 
   }, []);
 
+  /** Todo 추가 이벤트 */
   const addTodo = (todo: string) => {
     // 새로운 할일(todo) 객체 생성
     const newTodo = {
@@ -21,17 +22,32 @@ const App = () => {
 
     // state 업데이트
     setTodos((prev) => [...prev, newTodo]);
-
-    console.dir(todos);
   }
 
+  /** 완료 체크 이벤트 */
+  const checkTodo = (id: number) => {
+    setTodos((prev) => 
+      prev.map((todo) => 
+        todo.id === id ? {...todo, completed: !todo.completed} : todo
+      )
+    );
+  }
+
+  /** 삭제 이벤트 */
+  const removeTodo = (id: number) => {
+    setTodos((prev) => {//prev.filter((todo) => todo.id !== id)
+      const findIdx = prev.findIndex((todo) => todo.id === id);
+      prev.splice(findIdx, 1);
+      return [...prev];
+    });
+  }
 
   return(
     <>
       <View style={styles.container}>
         <Text style={styles.title}>Todo App</Text>
         <Header addTodo={addTodo} />
-        <Body />
+        <Body todos={todos} checkTodo={checkTodo} removeTodo={removeTodo} />
       </View>
     </>
   )
