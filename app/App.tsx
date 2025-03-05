@@ -3,13 +3,25 @@ import Header from "./(layout)/Header";
 import Body from "./(layout)/Body";
 import { useEffect, useState } from "react";
 import { Todo } from "@/interface/App";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const App = () => {
   /** State */
   const [todos, setTodos] = useState<Todo[]>([]);
-  useEffect(() => {
 
+  /** Hooks */
+  useEffect(() => {
+    // Storage 에서 데이터 조회
+    componentDidMount();
   }, []);
+  useEffect(() => {
+    if (!todos) {
+      return;
+    }
+
+    // 저장소에는 String만 저장이 가능하다.
+    AsyncStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
 
   /** Todo 추가 이벤트 */
   const addTodo = (todo: string) => {
@@ -39,6 +51,14 @@ const App = () => {
       const findIdx = prev.findIndex((todo) => todo.id === id);
       prev.splice(findIdx, 1);
       return [...prev];
+    });
+  }
+
+  /** 저장소(Storage) 에서 조회 */
+  const componentDidMount = () => {
+    AsyncStorage.getItem("todos").then((data) => {
+      const todos = JSON.parse(data || '[]');
+      setTodos(todos);
     });
   }
 

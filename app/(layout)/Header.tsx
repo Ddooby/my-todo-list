@@ -16,6 +16,7 @@ const Header: React.FC<TodoFormProps> = ({ addTodo }) => {
     }
   }
 
+  /** 엔터키 입력 이벤트 */
   const handleEnterAdd = (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
     addNewTodo();
   }
